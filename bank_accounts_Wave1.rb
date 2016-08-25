@@ -1,6 +1,7 @@
 module Bank
   class Account
     attr_accessor :id, :balance, :owner
+    # initialize class Account
     def initialize(id, balance, owner)
       @id = id
       @balance = balance.to_f

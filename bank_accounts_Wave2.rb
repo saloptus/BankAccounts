@@ -124,12 +124,6 @@ module Bank
   end
 end
 
-# my_account = Bank::Owner.new("David", "8998 101th Ave, Honolulu, Hawaii")
-
-# puts my_account.withdraw(20)
-# puts my_account.deposit(100)
-# puts my_account.withdraw(10)
-
 owners = Bank::Owner.all
 puts owners
 accounts = Bank::Account.all
@@ -139,13 +133,3 @@ puts Bank::Account.find("1217")
 puts Bank::Owner.find("15")
 
 puts Bank::AccountOwnerLoader.load_account_owner("account_owners.csv")
-
-
-
-# account1 = Bank::Account.new()
-# account1.deposit(300)
-# account1.withdraw(100)
-#
-# puts account1.id
-# puts account1.balance
-# puts owner1.address
