@@ -1,20 +1,23 @@
 require 'csv'
 
 module Bank
+  # represent a bank account
   class Account
     attr_accessor :id, :balance, :open_date, :owner
+    # initialize class Account
     def initialize(id, balance, open_date, owner)
       @id = id #account's id
       @balance = balance.to_i
       @owner = owner
       @open_date = open_date
-      #initial_balance cannot be negetive
       unless @balance >= 0
         raise ArgumentError.new("Initial balance in a new account can not be negetive.")
-      #raise ArugmentError when this happen
       end
     end
 
+    # load account infomation from csv account file
+    # input: csv file name
+    # output: an array of class Account objects
     def self.load_account_info(account_file_name)
       csv_account = CSV.open(account_file_name, "r")
       accounts = []
@@ -24,10 +27,18 @@ module Bank
       return accounts
     end
 
+    # cache csv account file - avoid repeatitve loads of the same file
+    # output: an array of class Account objects
     def self.all
-      return load_account_info("accounts.csv")
+      if @accounts == nil
+        @accounts = load_account_info("accounts.csv")
+      end
+      return @accounts
     end
 
+    # identify account information by account id
+    # input: account id(string)
+    # output: an account object that corresponds to the given account id
     def self.find(id)
       found_account = nil
       all.each do |account|
@@ -39,40 +50,48 @@ module Bank
       return found_account
     end
 
+    # display account object information in format
     def to_s
       return "#{@id}, #{@balance}, #{@open_date}, #{@owner}" #instance variables on self object
     end
 
-    #withdraw money and return updated balance
+    # withdraw money from account
     def withdraw(money_out)
-      #check whether account balance is negetive before withdraw
       @balance -= money_out
       if @balance < 0
-        #prevent withdraw when balance is negetive
         puts "Sorry, you can not withdraw money as your account balance falls below zero."
         @balance += money_out
         return @balance
       else
-        #allow withdraw when balance is positive
         return @balance
       end
     end
 
-    #deposit money and return updated balance
+    # deposit money to account
     def deposit(money_in)
       @balance += money_in
+      if money_in < 0
+        @balance -= money_in
+        puts "Sorry, you can not deposit a negetive amount of money."
+      end
       return @balance
     end
+
   end
 
+  # represent an bank account owner
   class Owner
     attr_accessor :id, :name, :address
+    # initialize class Owner
     def initialize(id, name, address)
       @id = id #owner's id
       @name = name
       @address = address
     end
 
+    # load owner infomation from csv owner file
+    # input: csv file name
+    # output: an array of class Owner objects
     def self.load_owner_info(owner_file_name)
       csv_owner = CSV.open(owner_file_name, "r")
       owners = []
@@ -85,14 +104,18 @@ module Bank
       return owners
     end
 
+    # cache csv owner file - avoid repeatitve loads of the same file
+    # output: an array of class Owner objects
     def self.all
-      return load_owner_info("owners.csv")
+      if @accounts == nil
+        @accounts = load_owner_info("owners.csv")
+      end
+      return @accounts
     end
 
-    def to_s
-      return "#{@id}, #{@name}, #{@address}" #instance variables on self object
-    end
-
+    # identify  owner information by owner id
+    # input: owner id(string)
+    # output: an owner object that corresponds to the given owner id
     def self.find(id)
       found_owner = nil
       all.each do |owner|
@@ -104,8 +127,16 @@ module Bank
       return found_owner
     end
 
+    # display owner object information in format
+    def to_s
+      return "#{@id}, #{@name}, #{@address}" #instance variables on self object
+    end
+
   end
 
+  # load account with its corresponded owner
+  # input: account id and owner id information file name(string)
+  # output: an array of class Account objects with owner attributes
   class AccountOwnerLoader
     def self.load_account_owner(account_owner_file_name)
       csv_acc_owner = CSV.open(account_owner_file_name, "r")
@@ -124,12 +155,22 @@ module Bank
   end
 end
 
+# print all owner information
 owners = Bank::Owner.all
 puts owners
+# print all account information
 accounts = Bank::Account.all
 puts accounts
 
+# print the account information of a given account id
+# return nil if can not find the account id
 puts Bank::Account.find("1217")
-puts Bank::Owner.find("15")
+puts Bank::Account.find("lgosdg")
 
+# print the owner information of a given owner id
+# return nil if can not find the owner id
+puts Bank::Owner.find("15")
+puts Bank::Owner.find("983")
+
+# pirnt all account's information and its owner's information given the account id and owner id relationship
 puts Bank::AccountOwnerLoader.load_account_owner("account_owners.csv")
