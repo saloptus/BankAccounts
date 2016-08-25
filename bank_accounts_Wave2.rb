@@ -170,5 +170,5 @@ puts Bank::Account.find("lgosdg")
 puts Bank::Owner.find("15")
 puts Bank::Owner.find("983")
 
-# pirnt all account's information and its owner's information given the account id and owner id relationship
+# print all account's information and its owner's information given the account id and owner id relationship
 puts Bank::AccountOwnerLoader.load_account_owner("account_owners.csv")
