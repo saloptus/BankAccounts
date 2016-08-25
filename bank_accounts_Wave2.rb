@@ -155,19 +155,21 @@ end
 # print all owner information
 owners = Bank::Owner.all
 puts owners
+puts "---------------------"
 # print all account information
 accounts = Bank::Account.all
 puts accounts
+puts "---------------------"
 
 # print the account information of a given account id
 # return nil if can not find the account id
 puts Bank::Account.find("1217")
 puts Bank::Account.find("lgosdg")
-
+puts "---------------------"
 # print the owner information of a given owner id
 # return nil if can not find the owner id
 puts Bank::Owner.find("15")
 puts Bank::Owner.find("983")
-
+puts "---------------------"
 # print all account's information and its owner's information given the account id and owner id relationship
 puts Bank::AccountOwnerLoader.load_account_owner("account_owners.csv")
