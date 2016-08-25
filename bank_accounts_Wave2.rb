@@ -63,10 +63,8 @@ module Bank
       if @balance < 0
         puts "Sorry, you can not withdraw money as your account balance falls below zero."
         @balance += money_out
-        return @balance
-      else
-        return @balance
       end
+      return @balance
     end
 
     # deposit money to account
