@@ -138,7 +138,6 @@ module Bank
   class AccountOwnerLoader
     def self.load_account_owner(account_owner_file_name)
       csv_acc_owner = CSV.open(account_owner_file_name, "r")
-
       accounts = []
       csv_acc_owner.each do |row|
         account_id = row[0]
