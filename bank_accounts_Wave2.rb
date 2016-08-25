@@ -1,3 +1,6 @@
+# Bank Account Wave 2:
+# https://github.com/Ada-C6/BankAccounts
+
 require 'csv'
 
 module Bank
