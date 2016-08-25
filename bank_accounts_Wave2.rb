@@ -4,9 +4,8 @@ module Bank
   # represent a bank account
   class Account
     attr_accessor :id, :balance, :open_date, :owner
-    # initialize class Account
     def initialize(id, balance, open_date, owner)
-      @id = id #account's id
+      @id = id #account id
       @balance = balance.to_i
       @owner = owner
       @open_date = open_date
@@ -37,7 +36,7 @@ module Bank
     end
 
     # identify account information by account id
-    # input: account id(string)
+    # input: account id (string)
     # output: an account object that corresponds to the given account id
     def self.find(id)
       found_account = nil
@@ -79,12 +78,11 @@ module Bank
 
   end
 
-  # represent an bank account owner
+  # represent a bank account owner
   class Owner
     attr_accessor :id, :name, :address
-    # initialize class Owner
     def initialize(id, name, address)
-      @id = id #owner's id
+      @id = id #owner id
       @name = name
       @address = address
     end
