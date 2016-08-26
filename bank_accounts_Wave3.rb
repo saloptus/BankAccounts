@@ -357,15 +357,21 @@ end
 # # print all account's information and its owner's information given the account id and owner id relationship
 # puts Bank::AccountOwnerLoader.load_account_owner("account_owners.csv")
 
-new_saving = Bank::SavingAccount.new(nil, 2000, nil, nil)
-puts new_saving.inspect
-puts Bank::Account.money_in_dollar(new_saving.withdraw(900))
-puts Bank::Account.money_in_dollar(new_saving.deposit(300))
+# new_saving = Bank::SavingAccount.new(nil, 2000, nil, nil)
+# puts new_saving.inspect
+# puts Bank::Account.money_in_dollar(new_saving.withdraw(900))
+# puts Bank::Account.money_in_dollar(new_saving.deposit(300))
+# puts "-----------------------"
+# new_checking = Bank::CheckingAccount.new(nil, 4000, nil, nil)
+# puts new_checking.inspect
+# puts Bank::Account.money_in_dollar(new_checking.withdraw(800))
+# puts Bank::Account.money_in_dollar(new_checking.deposit(400))
+# 4.times {puts  Bank::Account.money_in_dollar(new_checking.withdraw_using_check(2000))}
+# puts new_checking.inspect
 puts "-----------------------"
-new_checking = Bank::CheckingAccount.new(nil, 4000, nil, nil)
-puts new_checking.inspect
-puts Bank::Account.money_in_dollar(new_checking.withdraw(800))
-puts Bank::Account.money_in_dollar(new_checking.deposit(400))
-4.times {puts  Bank::Account.money_in_dollar(new_checking.withdraw_using_check(2000))}
-puts new_checking.inspect
+new_market = Bank::MoneyMarketAccount.new(nil, 1000000, nil, nil)
+puts new_market.inspect
+4.times {puts Bank::Account.money_in_dollar(new_market.withdraw(400000))}
+puts Bank::Account.money_in_dollar(new_market.deposit(800000))
+puts new_market.inspect
 puts "-----------------------"
