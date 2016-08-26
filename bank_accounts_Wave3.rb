@@ -22,7 +22,7 @@ module Bank
     end
 
     def self.money_in_dollar(money_in_cents)
-      return "$#{money_in_cents.to_f / 100}"
+      return "$#{money_in_cents.to_f / 100.0}"
     end
 
     # load account infomation from csv account file
@@ -174,7 +174,7 @@ module Bank
 
       if @balance - this_transaction_fee - money_out < @overdraft_limit
         puts "Sorry, you can not withdraw money as your account balance" +
-          "falls below overdraft limit #{Account.money_in_dollar(@overdraft_limit)}."
+          " falls below overdraft limit #{Account.money_in_dollar(@overdraft_limit)}."
         return
       end
 
@@ -190,7 +190,6 @@ module Bank
 
   end
   #=================MONEY MARKET ACCOUNT===================
-  #STILL WORKING
 
   class MoneyMarketAccount < Account
 
@@ -214,9 +213,9 @@ module Bank
       if @balance - money_out < @min_balance
         @balance -= @Penalty_fee
         puts "Sorry, you can not withdraw money as your account balance" +
-          "falls below balance base: #{Account.money_in_dollar(@min_balance)}" +
-          "Each transction without funding the account first will cause" +
-          "a Penalty fee #{Account.money_in_dollar(@Penalty_fee)}"
+          " falls below balance base: #{Account.money_in_dollar(@min_balance)}" +
+          " Each transction without funding the account first will cause" +
+          " a Penalty fee #{Account.money_in_dollar(@Penalty_fee)}"
           return @balance
       end
 
@@ -361,6 +360,8 @@ end
 # puts new_saving.inspect
 # puts Bank::Account.money_in_dollar(new_saving.withdraw(900))
 # puts Bank::Account.money_in_dollar(new_saving.deposit(300))
+# puts Bank::Account.money_in_dollar(new_saving.add_interest(0.25))
+# puts new_saving.inspect
 # puts "-----------------------"
 # new_checking = Bank::CheckingAccount.new(nil, 4000, nil, nil)
 # puts new_checking.inspect
@@ -373,5 +374,6 @@ new_market = Bank::MoneyMarketAccount.new(nil, 1000000, nil, nil)
 puts new_market.inspect
 4.times {puts Bank::Account.money_in_dollar(new_market.withdraw(400000))}
 puts Bank::Account.money_in_dollar(new_market.deposit(800000))
+puts Bank::Account.money_in_dollar(new_market.add_interest(3))
 puts new_market.inspect
 puts "-----------------------"
