@@ -1,5 +1,9 @@
 # Bank Account Wave 3:
 # https://github.com/Ada-C6/BankAccounts
+# make default values(min_balance etc) in withdraw and other method to DRY the code
+# multi-level inheritance for interest rate
+# withdraw & deposit < 0 check / super, DRY it.
+# put everything in parent and make methods to overwrite unwanted part later.
 
 require 'csv'
 module Bank
@@ -99,7 +103,7 @@ module Bank
         raise ArgumentError.new("Sorry, saving account can not be created when initial deposit less than $10.")
       end
       @trans_fee = 200
-      @balance_base = 1000
+      @min_balance = 1000
     end
 
     def withdraw(money_out)
@@ -108,9 +112,9 @@ module Bank
         return @balance
       end
 
-      if @balance - @trans_fee - money_out < @balance_base
+      if @balance - @trans_fee - money_out < @min_balance
         puts "Sorry, you can not withdraw money as your account balance" +
-          "falls below balance base: #{Account.money_in_dollar(@balance_base)}"
+          "falls below balance base: #{Account.money_in_dollar(@min_balance)}"
         return @balance
       end
 
@@ -161,6 +165,8 @@ module Bank
         return @balance
       end
 
+      # Assume testing period is within one month
+      # Futher stimulation can be done by reset_checks
       this_transaction_fee = 0
       if @check_usage > 3
         this_transaction_fee = @trans_fee
@@ -186,16 +192,72 @@ module Bank
   #=================MONEY MARKET ACCOUNT===================
   #STILL WORKING
 
-  # class MoneyMarketAccount < Account
-  #
-  #   def initialize(id, balance, open_date, owner)
-  #     super
-  #     unless @balance >= 1000000
-  #       raise ArgumentError.new("Sorry, the initial balance should at least $10,000.")
-  #     end
-  #   end
-  #
-  # end
+  class MoneyMarketAccount < Account
+
+    def initialize(id, balance, open_date, owner)
+      super
+      @max_trans = 6
+      @min_balance = 1000000
+      @Penalty_fee = 10000
+      @trans_count = 0
+      unless @balance >= @min_balance
+        raise ArgumentError.new("Sorry, the initial balance should at least $10,000.")
+      end
+    end
+
+    def withdraw(money_out)
+      if money_out < 0
+        puts "Sorry, you can not withdraw a negative amount of money."
+        return @balance
+      end
+
+      if @balance - money_out < @min_balance
+        @balance -= @Penalty_fee
+        puts "Sorry, you can not withdraw money as your account balance" +
+          "falls below balance base: #{Account.money_in_dollar(@min_balance)}" +
+          "Each transction without funding the account first will cause" +
+          "a Penalty fee #{Account.money_in_dollar(@Penalty_fee)}"
+          return @balance
+      end
+
+      if @trans_count > @max_trans
+        puts "Sorry, this transaction can not be completed because you exceeded" +
+        "the maximum number of transaction #{@max_trans} this month."
+        return @balance
+      end
+      super
+      @trans_count += 1
+      return @balance
+    end
+
+    def deposit(money_in)
+      if money_in < 0
+        puts "Sorry, you can not deposit a negative amount of money."
+        return @balance
+      end
+      if @trans_count > @max_trans
+        puts "Sorry, this transaction can not be completed because you exceeded" +
+        "the maximum number of transaction #{@max_trans} this month."
+        return @balance
+      end
+      super
+      # No transcation count on deposit transction performed to reach or exceed minimum balance
+      unless @balance < @min_balance && @balance + money_in >= @min_balance
+        @trans_count += 1
+      end
+      return @balance
+    end
+
+    # inherit this part from checking account?
+    def add_interest(rate)
+      interest_incremented = @balance * rate/100
+      return interest_incremented
+    end
+
+    def reset_trans
+      @trans_count = 0
+    end
+  end
   #======================OWNER=============================
   # represent a bank account owner
   class Owner
