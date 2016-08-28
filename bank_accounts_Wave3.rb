@@ -94,12 +94,13 @@ module Bank
 
   class SavingAccount < Account
     def initialize(id, balance, open_date, owner)
-      super
-      unless @balance >= 1000
-        raise ArgumentError.new("Sorry, saving account can not be created when initial deposit less than $10.")
-      end
       @trans_fee = 200
       @min_balance = 1000
+      super
+      unless @balance >= @min_balance
+        raise ArgumentError.new("Sorry, saving account can not be created when initial deposit less than minimum balance: #{Account.money_in_dollar(@min_balance)}.")
+      end
+
     end
 
     def withdraw(money_out)
@@ -110,7 +111,7 @@ module Bank
 
       if @balance - @trans_fee - money_out < @min_balance
         puts "Sorry, you can not withdraw money as your account balance" +
-          "falls below balance base: #{Account.money_in_dollar(@min_balance)}"
+          "falls below minimum balance: #{Account.money_in_dollar(@min_balance)}"
         return @balance
       end
 
