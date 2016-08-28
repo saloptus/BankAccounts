@@ -1,9 +1,5 @@
 # Bank Account Wave 3:
 # https://github.com/Ada-C6/BankAccounts
-# make default values(min_balance etc) in withdraw and other method to DRY the code
-# multi-level inheritance for interest rate
-# withdraw & deposit < 0 check / super, DRY it.
-# put everything in parent and make methods to overwrite unwanted part later.
 
 require 'csv'
 module Bank
@@ -22,7 +18,7 @@ module Bank
     end
 
     def self.money_in_dollar(money_in_cents)
-      return "$#{money_in_cents.to_f / 100.0}"
+      return "$#{money_in_cents.to_f / 100.0}" # how to do two decimal?
     end
 
     # load account infomation from csv account file
@@ -334,6 +330,7 @@ module Bank
   end
 end
 
+#===========TEST CASE FOR WAVE 2====================
 # # print all owner information
 # owners = Bank::Owner.all
 # puts owners
@@ -356,20 +353,22 @@ end
 # # print all account's information and its owner's information given the account id and owner id relationship
 # puts Bank::AccountOwnerLoader.load_account_owner("account_owners.csv")
 
-# new_saving = Bank::SavingAccount.new(nil, 2000, nil, nil)
-# puts new_saving.inspect
-# puts Bank::Account.money_in_dollar(new_saving.withdraw(900))
-# puts Bank::Account.money_in_dollar(new_saving.deposit(300))
-# puts Bank::Account.money_in_dollar(new_saving.add_interest(0.25))
-# puts new_saving.inspect
-# puts "-----------------------"
-# new_checking = Bank::CheckingAccount.new(nil, 4000, nil, nil)
-# puts new_checking.inspect
-# puts Bank::Account.money_in_dollar(new_checking.withdraw(800))
-# puts Bank::Account.money_in_dollar(new_checking.deposit(400))
-# 4.times {puts  Bank::Account.money_in_dollar(new_checking.withdraw_using_check(2000))}
-# puts new_checking.inspect
-puts "-----------------------"
+#===========TEST CASE FOR WAVE 3====================
+puts "--------SAVING ACCOUNT TEST------------"
+new_saving = Bank::SavingAccount.new(nil, 2000, nil, nil)
+puts new_saving.inspect
+puts Bank::Account.money_in_dollar(new_saving.withdraw(900))
+puts Bank::Account.money_in_dollar(new_saving.deposit(300))
+puts Bank::Account.money_in_dollar(new_saving.add_interest(0.25))
+puts new_saving.inspect
+puts "--------CHECKING ACCOUNT TEST---------------"
+new_checking = Bank::CheckingAccount.new(nil, 4000, nil, nil)
+puts new_checking.inspect
+puts Bank::Account.money_in_dollar(new_checking.withdraw(800))
+puts Bank::Account.money_in_dollar(new_checking.deposit(400))
+4.times {puts  Bank::Account.money_in_dollar(new_checking.withdraw_using_check(2000))}
+puts new_checking.inspect
+puts "--------MONEY MARKET ACCOUNT TEST---------------"
 new_market = Bank::MoneyMarketAccount.new(nil, 1000000, nil, nil)
 puts new_market.inspect
 4.times {puts Bank::Account.money_in_dollar(new_market.withdraw(400000))}
